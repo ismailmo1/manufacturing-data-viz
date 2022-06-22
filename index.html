@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test MES</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"
+        integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="C:\Users\ismail.mohammed\Downloads\optsched.json"></script>
+</head>
+
+<body>
+    <div>
+        Hello MES
+    </div>
+    <canvas id="myChart" width="400" height="100vh"></canvas>
+    <script>
+        const ctx = document.getElementById('myChart');
+        const vfData = [
+            {
+                "sequence": 1,
+                "original_sequence": 5,
+                "order_number": 805,
+                "process_time": 122.03389830508475,
+                "priority": 3,
+                "dead_line": 0,
+                "start_time": 0,
+                "end_time": 122.03389830508475,
+                "tardiness_flag": false,
+                "tardiness_duration": 122.03389830508475
+            },
+            {
+                "sequence": 2,
+                "original_sequence": 6,
+                "order_number": 806,
+                "process_time": 238.41059602649008,
+                "priority": 1,
+                "dead_line": 0,
+                "start_time": 122.03389830508475,
+                "end_time": 360.44449433157484,
+                "tardiness_flag": false,
+                "tardiness_duration": 360.44449433157484
+            },
+            {
+                "sequence": 3,
+                "original_sequence": 1,
+                "order_number": 801,
+                "process_time": 258.99280575539569,
+                "priority": 1,
+                "dead_line": 600,
+                "start_time": 360.44449433157484,
+                "end_time": 619.43730008697048,
+                "tardiness_flag": false,
+                "tardiness_duration": 19.437300086970481
+            },
+            {
+                "sequence": 4,
+                "original_sequence": 2,
+                "order_number": 802,
+                "process_time": 130.43478260869566,
+                "priority": 2,
+                "dead_line": 700,
+                "start_time": 619.43730008697048,
+                "end_time": 749.87208269566611,
+                "tardiness_flag": false,
+                "tardiness_duration": 49.872082695666109
+            },
+            {
+                "sequence": 5,
+                "original_sequence": 4,
+                "order_number": 804,
+                "process_time": 461.53846153846155,
+                "priority": 1,
+                "dead_line": 0,
+                "start_time": 749.87208269566611,
+                "end_time": 1211.4105442341277,
+                "tardiness_flag": false,
+                "tardiness_duration": 1211.4105442341277
+            },
+            {
+                "sequence": 6,
+                "original_sequence": 3,
+                "order_number": 803,
+                "process_time": 238.41059602649008,
+                "priority": 1,
+                "dead_line": 2000,
+                "start_time": 1211.4105442341277,
+                "end_time": 1449.8211402606178,
+                "tardiness_flag": true,
+                "tardiness_duration": -550.17885973938223
+            }
+        ]
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Before Optimisation', 'After Optimisation'],
+                datasets: [{
+                    data: [12, 19],
+                    label: "setup time",
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    data: [20, 29],
+                    label: "mixing time",
+                    backgroundColor: [
+                        'rgba(255, 205, 86, 0.2)',
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    data: [5, 0],
+                    label: "idle time",
+                    backgroundColor: [
+                        'rgba(201, 203, 207, 0.2)',
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    data: [20, 29],
+                    label: "cleaning time",
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)',
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    data: [5, 0],
+                    label: "idle time",
+                    backgroundColor: [
+                        'rgba(201, 203, 207, 0.2)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                            generateLabels: function () {
+                                return [{
+                                    text: "setup time",
+                                    fillStyle: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                    ],
+                                },
+                                {
+                                    text: "mixing time",
+                                    fillStyle: [
+                                        'rgba(255, 205, 86, 0.2)',
+                                    ],
+                                },
+                                {
+                                    text: "cleaning time",
+                                    fillStyle: [
+                                        'rgba(54, 162, 235, 0.2)',
+                                    ],
+                                },
+                                {
+                                    text: "idle time",
+                                    fillStyle: [
+                                        'rgba(201, 203, 207, 0.2)',
+                                    ],
+                                }]
+                            }
+                        }
+                    }
+                },
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        stacked: true,
+                        beginAtZero: true
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
