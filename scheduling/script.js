@@ -19,7 +19,7 @@ const vfData = [
         "order_number": 806,
         "process_time": 238.41059602649008,
         "priority": 1,
-        "dead_line": 0,
+        "dead_line": 10,
         "start_time": 122.03389830508475,
         "end_time": 360.44449433157484,
         "tardiness_flag": false,
@@ -55,7 +55,7 @@ const vfData = [
         "order_number": 804,
         "process_time": 461.53846153846155,
         "priority": 1,
-        "dead_line": 0,
+        "dead_line": 20,
         "start_time": 749.87208269566611,
         "end_time": 1211.4105442341277,
         "tardiness_flag": false,
@@ -83,10 +83,10 @@ const colours = ['rgba(255, 99, 132, 0.2)',
     'rgba(153, 102, 255, 0.2)',
     'rgba(201, 203, 207, 0.2)'
 ]
-const colourMap = {}
+const bgColourMap = {}
 
 vfData.forEach((order, idx) => {
-    colourMap[order['order_number']] = colours[idx]
+    bgColourMap[order['order_number']] = colours[idx]
 })
 
 const vfChartBeforeData = vfData.sort(
@@ -97,8 +97,8 @@ const vfChartBeforeData = vfData.sort(
         return {
             data: [data['process_time']],
             label: data['order_number'],
-            backgroundColor: colourMap[data['order_number']],
-            borderColor: vfData.map(() => 'rgb(0,0,0)'),
+            backgroundColor: bgColourMap[data['order_number']],
+            borderColor: 'rgb(0,0,0)',
             borderWidth: 0.4
         }
     })
@@ -107,16 +107,51 @@ const vfChartAfterData = vfData.sort(
     (a, b) => {
         return a['sequence'] - b['sequence']
     })
-    .map((data, idx) => {
+    .map((data) => {
         return {
             data: [data['process_time']],
             label: data['order_number'],
-            backgroundColor: colourMap[data['order_number']],
-            borderColor: vfData.map(() => 'rgb(0,0,0)'),
+            backgroundColor: bgColourMap[data['order_number']],
+            borderColor: 'rgb(0,0,0)',
             borderWidth: 0.4
         }
     })
 
+function getAnnotations() {
+    // dynamically add annotations
+    const deadLines = {}
+    vfData.forEach((order, idx) => {
+        deadLines[`line_${idx}`] =
+        {
+            type: 'line',
+            label: {
+                enabled: (ctx) => ctx.hovered,
+                backgroundColor: 'rgb(0,0,0)',
+                drawTime: 'afterDatasetsDraw',
+                position: (ctx) => ctx.hoverPosition,
+                content: (ctx) => [`Order ${order['order_number']} deadline:`, `${order['dead_line']}`]
+            },
+            yMin: -100,
+            yMax: 100,
+            xMin: order['dead_line'],
+            xMax: order['dead_line'],
+            borderColor: bgColourMap[order['order_number']],
+            borderWidth: 5,
+            display: true,
+            enter(ctx, event) {
+                ctx.hovered = true;
+                ctx.hoverPosition = (event.x / ctx.chart.chartArea.width * 100) + '%';
+                ctx.chart.update();
+            },
+            leave(ctx, event) {
+                ctx.hovered = false;
+                ctx.chart.update();
+            }
+        }
+
+    })
+    return deadLines;
+}
 
 const beforeChart = new Chart(beforeCtx, {
     type: 'bar',
@@ -125,8 +160,13 @@ const beforeChart = new Chart(beforeCtx, {
         datasets: vfChartBeforeData
     },
     options: {
+        onClick: barClickHandler,
         plugins: {
-            legend: { title: { display: true, text: "order number" } }
+            legend: { title: { display: true, text: "order number" } },
+            annotation: {
+                drawTime: 'beforeDatasetsDraw',
+                annotations: getAnnotations
+            }
         },
         indexAxis: 'y',
         scales: {
@@ -149,6 +189,7 @@ const afterChart = new Chart(afterCtx, {
         datasets: vfChartAfterData
     },
     options: {
+        onClick: barClickHandler,
         plugins: {
             tooltip: {
                 callbacks: {
@@ -159,7 +200,10 @@ const afterChart = new Chart(afterCtx, {
                     }
                 }
             },
-            legend: { display: false }
+            legend: { display: false },
+            annotation: {
+                annotations: getAnnotations
+            }
         },
         // },
         indexAxis: 'y',
@@ -175,3 +219,16 @@ const afterChart = new Chart(afterCtx, {
         }
     }
 });
+
+function barClickHandler(event, elements) {
+    let data;
+    if (event.chart.canvas.id === 'afterChart') {
+        data = vfChartAfterData[elements[0].datasetIndex];
+    } else if (event.chart.canvas.id === 'beforeChart') {
+        data = vfChartBeforeData[elements[0].datasetIndex];
+    }
+    const orderObj = vfData.filter((order) => order.order_number == data.label)[0]
+    const orderDetailsCard = document.getElementById("detailInfo");
+    orderDetailsCard.innerText = JSON.stringify(orderObj)
+
+}
