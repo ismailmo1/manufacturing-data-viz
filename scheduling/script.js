@@ -121,7 +121,7 @@ function getAnnotations() {
     // dynamically add annotations
     const deadLines = {}
     vfData.forEach((order, idx) => {
-        deadLines[`line_${idx}`] =
+        deadLines[order['order_number']] =
         {
             type: 'line',
             label: {
@@ -153,6 +153,61 @@ function getAnnotations() {
     return deadLines;
 }
 
+function filterAnnotations(chart, orderNumber) {
+    // make all other order annotations transparent
+    const otherOrderData = chart.data.datasets.filter((data) => data.label !== orderNumber);
+    const otherOrderNumbers = otherOrderData.map((data) => (data.label))
+    const annotations = getAnnotations();
+    // check first annotation
+    const isFiltered = chart.options.plugins.annotation.annotations[otherOrderNumbers[0]].borderColor === 'rgba(255,255,255,0)';
+    if (!isFiltered) {
+        otherOrderNumbers.forEach((orderNum) => {
+            annotations[orderNum].borderColor = 'rgba(255,255,255,0)';;
+        })
+    }
+    chart.options.plugins.annotation.annotations = annotations;
+
+
+    chart.update();
+}
+
+function filterOrders(chart, orderNumber) {
+    // removes borders
+    // makes all other orders transparent
+    const otherOrderData = chart.data.datasets.filter((data) => data.label !== orderNumber);
+    const selectedOrderData = chart.data.datasets.find((data) => data.label === orderNumber);
+    // check first data obj
+    const isFiltered = otherOrderData[0].backgroundColor === 'rgba(255,255,255,0)';
+    if (isFiltered) {
+        // add border back
+        selectedOrderData.borderColor = 'rgb(0,0,0)';
+        // unhide other orders 
+        otherOrderData.forEach((order) => {
+            order.backgroundColor = bgColourMap[order.label]
+            order.borderColor = 'rgb(0,0,0)';
+        })
+
+    } else {
+        // remove border 
+        selectedOrderData.borderColor = 'rgba(255,255,255,0)';
+        // hide other orders
+        otherOrderData.forEach((order) => {
+            order.backgroundColor = 'rgba(255,255,255,0)';
+            order.borderColor = 'rgba(255,255,255,0)';
+        })
+    }
+    chart.update();
+}
+
+function legendClickHandler(e, legendItem, legend) {
+    const selectedOrderNumber = legendItem.text
+    filterOrders(beforeChart, selectedOrderNumber);
+    filterOrders(afterChart, selectedOrderNumber);
+    filterAnnotations(beforeChart, selectedOrderNumber);
+    filterAnnotations(afterChart, selectedOrderNumber);
+}
+
+
 const beforeChart = new Chart(beforeCtx, {
     type: 'bar',
     data: {
@@ -162,7 +217,13 @@ const beforeChart = new Chart(beforeCtx, {
     options: {
         onClick: barClickHandler,
         plugins: {
-            legend: { title: { display: true, text: "order number" } },
+            legend: {
+                title: {
+                    display: true,
+                    text: "order number"
+                },
+                onClick: legendClickHandler
+            },
             annotation: {
                 drawTime: 'beforeDatasetsDraw',
                 annotations: getAnnotations
@@ -200,7 +261,7 @@ const afterChart = new Chart(afterCtx, {
                     }
                 }
             },
-            legend: { display: false },
+            legend: { display: false, },
             annotation: {
                 annotations: getAnnotations
             }
@@ -226,7 +287,12 @@ function barClickHandler(event, elements) {
         data = vfChartAfterData[elements[0].datasetIndex];
     } else if (event.chart.canvas.id === 'beforeChart') {
         data = vfChartBeforeData[elements[0].datasetIndex];
+
     }
+    filterOrders(beforeChart, data.label);
+    filterOrders(afterChart, data.label);
+    filterAnnotations(beforeChart, data.label);
+    filterAnnotations(afterChart, data.label);
     const orderObj = vfData.filter((order) => order.order_number == data.label)[0]
     const orderDetailsCard = document.getElementById("detailInfo");
     orderDetailsCard.innerText = JSON.stringify(orderObj)
