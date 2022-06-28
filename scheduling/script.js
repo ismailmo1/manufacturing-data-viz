@@ -117,7 +117,7 @@ const vfChartAfterData = vfData.sort(
         }
     })
 
-function getAnnotations() {
+function getDeadlineAnnotations() {
     // dynamically add annotations
     const deadLines = {}
     vfData.forEach((order, idx) => {
@@ -153,17 +153,78 @@ function getAnnotations() {
     return deadLines;
 }
 
+function getLatenessAnnotation(chart, orderData) {
+    const orderNumber = orderData['order_number']
+    let endTime = orderData['end_time'];
+    let isLate = !orderData['tardiness_flag']
+    let latenessDuration = orderData['tardiness_duration']
+
+    if (chart.canvas.id === 'beforeChart') {
+        // calculate end time for before optimisation
+        const chartData = chart.data.datasets
+        const orderObj = chartData.find((data) => data.label === orderNumber);
+        const orderIdx = chartData.indexOf(orderObj)
+        // dataset is ordered by sequence 
+        // grab all datasets except work orders after current
+        const prevOrders = chartData.slice(0, orderIdx + 1)
+
+        // sum up all values of remaining work orders
+        endTime = (prevOrders.reduce((prev, curr) => {
+            return prev + curr.data[0]
+        }, 0));
+
+        // calculate lateness for before chart
+        latenessDuration = endTime - orderData['dead_line'];
+        isLate = latenessDuration > 0;
+
+    }
+    return {
+        type: 'line',
+        label: {
+            enabled: true,
+            backgroundColor: 'rgb(0,0,0)',
+            drawTime: 'afterDatasetsDraw',
+            content: (ctx) => isLate ? ['late by:', Math.round(latenessDuration)] : ['early by:', -Math.round(latenessDuration)]
+        },
+        arrowHeads: {
+            start: {
+                enabled: true,
+                borderColor: 'rgb(0,0,0)'
+            },
+            end: {
+                enabled: true,
+                borderColor: 'rgb(0,0,0)'
+            }
+        },
+        xMax: orderData['dead_line'],
+        xMin: endTime,
+        xScaleID: 'x',
+        yMax: 0,
+        yMin: 0,
+        yScaleID: 'y',
+        borderColor: 'rgb(0,0,0)',
+        borderWidth: 3,
+        display: true,
+
+    }
+}
+
 function filterAnnotations(chart, orderNumber) {
-    // make all other order annotations transparent
     const otherOrderData = chart.data.datasets.filter((data) => data.label !== orderNumber);
     const otherOrderNumbers = otherOrderData.map((data) => (data.label))
-    const annotations = getAnnotations();
+    const annotations = getDeadlineAnnotations();
     // check first annotation
     const isFiltered = chart.options.plugins.annotation.annotations[otherOrderNumbers[0]].borderColor === 'rgba(255,255,255,0)';
     if (!isFiltered) {
+        // make all other order annotations transparent
         otherOrderNumbers.forEach((orderNum) => {
             annotations[orderNum].borderColor = 'rgba(255,255,255,0)';;
         })
+
+        const selectedOrderData = vfData.find((order) => order.order_number == orderNumber)
+        // add lateness annotations
+        latenessAnnotation = getLatenessAnnotation(chart, selectedOrderData)
+        annotations['lateness'] = latenessAnnotation
     }
     chart.options.plugins.annotation.annotations = annotations;
 
@@ -226,7 +287,7 @@ const beforeChart = new Chart(beforeCtx, {
             },
             annotation: {
                 drawTime: 'beforeDatasetsDraw',
-                annotations: getAnnotations
+                annotations: getDeadlineAnnotations
             }
         },
         indexAxis: 'y',
@@ -256,14 +317,14 @@ const afterChart = new Chart(afterCtx, {
                 callbacks: {
                     beforeLabel: function (context) {
                         orderNumber = context.dataset.label;
-                        orderObj = vfData.filter((order) => order.order_number == orderNumber)[0]
+                        orderObj = vfData.find((order) => order.order_number == orderNumber)
                         return `${orderObj['original_sequence']} => ${orderObj['sequence']}`
                     }
                 }
             },
             legend: { display: false, },
             annotation: {
-                annotations: getAnnotations
+                annotations: getDeadlineAnnotations
             }
         },
         // },
