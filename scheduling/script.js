@@ -268,7 +268,6 @@ function legendClickHandler(e, legendItem, legend) {
     filterAnnotations(afterChart, selectedOrderNumber);
 }
 
-
 const beforeChart = new Chart(beforeCtx, {
     type: 'bar',
     data: {
@@ -277,6 +276,7 @@ const beforeChart = new Chart(beforeCtx, {
     },
     options: {
         onClick: barClickHandler,
+
         plugins: {
             legend: {
                 title: {
@@ -299,6 +299,9 @@ const beforeChart = new Chart(beforeCtx, {
             y: {
                 stacked: true,
                 beginAtZero: true,
+                afterFit: function (scaleInstance) {
+                    scaleInstance.width = 120; // sets the width to 100px
+                }
             }
         }
     }
@@ -336,7 +339,10 @@ const afterChart = new Chart(afterCtx, {
             },
             y: {
                 stacked: true,
-                beginAtZero: true
+                beginAtZero: true,
+                afterFit: function (scaleInstance) {
+                    scaleInstance.width = 120; // sets the width to 100px
+                }
             }
         }
     }
