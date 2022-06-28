@@ -1,5 +1,7 @@
 const beforeCtx = document.getElementById('beforeChart');
 const afterCtx = document.getElementById('afterChart');
+const comparisonCtx = document.getElementById('comparisonChart');
+
 const vfData = [
     {
         "sequence": 1,
@@ -209,6 +211,18 @@ function getLatenessAnnotation(chart, orderData) {
     }
 }
 
+let unoptimisedOrderLateness = 0;
+let currTime = 0;
+vfChartBeforeData.forEach((order) => {
+    const orderDeadline = vfData.find((vfOrder) => vfOrder.order_number === order.label)['dead_line']
+    currTime += Number(order.data);
+    const orderLateness = currTime - orderDeadline;
+    if (orderLateness > 0) unoptimisedOrderLateness += orderLateness;
+    // dont negate lateness for early orders
+    console.log(unoptimisedOrderLateness);
+
+})
+
 function filterAnnotations(chart, orderNumber) {
     const otherOrderData = chart.data.datasets.filter((data) => data.label !== orderNumber);
     const otherOrderNumbers = otherOrderData.map((data) => (data.label))
@@ -365,3 +379,65 @@ function barClickHandler(event, elements) {
     orderDetailsCard.innerText = JSON.stringify(orderObj)
 
 }
+'rgba(255, 159, 64, 0.2)',
+    'rgba(255, 205, 86, 0.2)',
+    'rgba(75, 192, 192, 0.2)',
+    'rgba(54, 162, 235, 0.2)',
+    'rgba(153, 102, 255, 0.2)',
+    'rgba(201, 203, 207, 0.2)'
+
+'rgba(255, 99, 132, 0.2)',
+    'rgba(255, 159, 64, 0.2)',
+    'rgba(255, 205, 86, 0.2)',
+    'rgba(75, 192, 192, 0.2)',
+    'rgba(54, 162, 235, 0.2)',
+    'rgba(153, 102, 255, 0.2)',
+    'rgba(201, 203, 207, 0.2)'
+const comparisonChart = new Chart(comparisonCtx, {
+    type: 'bar',
+    labels: ['average', 'sum'],
+    data: {
+        labels: ['Average Lateness', 'Total Lateness'],
+        datasets: [{
+            label: 'Unoptimised',
+            data: [unoptimisedOrderLateness / vfData.length, unoptimisedOrderLateness],
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgb(0,0,0)',
+            borderWidth: 0.4
+        },
+        {
+            label: 'Optimised',
+            data: [sumLateness(vfData) / vfData.length, sumLateness(vfData),],
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgb(0,0,0)',
+            borderWidth: 0.4
+        }],
+    },
+    options: {
+        // },
+        scales: {
+            x: {
+                beginAtZero: true
+            },
+            y: {
+                beginAtZero: true,
+                afterFit: function (scaleInstance) {
+                    scaleInstance.width = 120; // sets the width to 100px
+                }
+            }
+        }
+    }
+
+})
+
+function sumLateness(vfData) {
+    // dont negate lateness for early orders
+    return vfData.reduce((prev, curr) => {
+        if (!curr['tardiness_flag']) {
+            return prev + curr["tardiness_duration"]
+        }
+        return prev
+    }, 0)
+
+}
+
