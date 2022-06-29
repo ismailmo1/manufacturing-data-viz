@@ -1,0 +1,13 @@
+body{
+    font-family:Arial, Helvetica, sans-serif; 
+    max-width: 1080px; 
+    padding-top: 20px;
+    margin: 0 auto !important; 
+	float: none !important; 
+}
+
+h1{
+    display:flex; 
+    justify-content:center; 
+    padding:10px
+}
