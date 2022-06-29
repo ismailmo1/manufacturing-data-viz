@@ -64,7 +64,7 @@ const tree = d3.layout.tree()
 const diagonal = d3.svg.diagonal()
     .projection(function (d) { return [d.y, d.x]; });
 
-const svg = d3.select("body").append("svg")
+const svg = d3.select("#tree").append("svg")
     .attr("width", width + margin.right + margin.left)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
