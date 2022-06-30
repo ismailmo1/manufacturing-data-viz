@@ -186,3 +186,5 @@ function click(d) {
     update(d);
 }
 
+//TODO add where used functionality 
+// e.g. when you click on a raw material it shows graph of where raw material is used
