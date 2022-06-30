@@ -20,6 +20,16 @@
     <h1>Quality Adjustment Workflow</h1>
     <canvas id="saltCurveChart" width="500" height="300"></canvas>
 
+    <div class="grid-container">
+        <div class="grid-item">
+            <label for="desired">Desired Viscosity: </label>
+            <input type="number" name="desired" id="desiredViscosityInput" step=0.2>
+        </div>
+        <div class="grid-item">
+            <label for="current">Current Viscosity: </label>
+            <input type="number" name="current" id="currentViscosityInput" step=0.2>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 
