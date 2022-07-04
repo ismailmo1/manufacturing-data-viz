@@ -1,3 +1,9 @@
+import Chart from 'chart.js/auto';
+import annotationPlugin from 'chartjs-plugin-annotation';
+import './style.css';
+
+Chart.register(annotationPlugin);
+
 const beforeCtx = document.getElementById('beforeChart');
 const afterCtx = document.getElementById('afterChart');
 const comparisonCtx = document.getElementById('comparisonChart');
@@ -237,7 +243,7 @@ function filterAnnotations(chart, orderNumber) {
 
         const selectedOrderData = vfData.find((order) => order.order_number == orderNumber)
         // add lateness annotations
-        latenessAnnotation = getLatenessAnnotation(chart, selectedOrderData)
+        const latenessAnnotation = getLatenessAnnotation(chart, selectedOrderData)
         annotations['lateness'] = latenessAnnotation
     }
     chart.options.plugins.annotation.annotations = annotations;
@@ -333,8 +339,9 @@ const afterChart = new Chart(afterCtx, {
             tooltip: {
                 callbacks: {
                     beforeLabel: function (context) {
-                        orderNumber = context.dataset.label;
-                        orderObj = vfData.find((order) => order.order_number == orderNumber)
+                        const orderNumber = context.dataset.label;
+                        console.log(orderNumber);
+                        const orderObj = vfData.find((order) => order.order_number == orderNumber)
                         return `${orderObj['original_sequence']} => ${orderObj['sequence']}`
                     }
                 }

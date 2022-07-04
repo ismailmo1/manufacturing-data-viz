@@ -1,3 +1,6 @@
+import * as d3 from "d3";
+import './style.css';
+
 // modified from https://bl.ocks.org/d3noob/8375092
 
 const treeData = [
@@ -58,11 +61,17 @@ const height = 500 - margin.top - margin.bottom;
 let currNodeId = 0
 const duration = 750;
 
-const tree = d3.layout.tree()
+const tree = d3.tree()
     .size([height, width]);
 
-const diagonal = d3.svg.diagonal()
-    .projection(function (d) { return [d.y, d.x]; });
+
+const diagonal = d3.linkHorizontal()
+    .x(function (d) {
+        return d.x;
+    })
+    .y(function (d) {
+        return d.y;
+    });
 
 const svg = d3.select("#tree").append("svg")
     .attr("width", width + margin.right + margin.left)
@@ -75,10 +84,12 @@ const root = treeData[0];
 root.x0 = height / 2;
 root.y0 = 0;
 
+const nodeData = d3.hierarchy(root)
 // collapse all nodes on initial load
-tree.nodes(root).forEach((n) => {
-    click(n)
-})
+// tree.nodes(root).forEach((n) => {
+//     click(n)
+// })
+const nodes = tree(nodeData);
 
 d3.select(self.frameElement).style("height", "500px");
 
