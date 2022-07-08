@@ -22,9 +22,21 @@ export function diagonal(s, d) {
 
 function addProductDetails(d) {
     const product = productData[d.data.name]
+    const productIngredients = d.children || d._children
 
     document.getElementById('productName').innerText = d.data.name;
     document.getElementById('lotNumber').innerText = product.lotNumber;
+    document.getElementById('quantity').innerText = product.quantity;
+    document.getElementById('date').innerText = product.date;
+    document.getElementById('operation').innerText = "Raw Material"
+    document.getElementById('materials').innerText = "Raw Material"
+
+    if (productIngredients) {
+        const firstIngredientData = productData[productIngredients[0].data.name]
+        document.getElementById('operation').innerText = firstIngredientData.processName;
+        document.getElementById('materials').innerText = productIngredients.map(p => " " + p.data.name)
+    }
+
 }
 
 // Toggle children on click.
@@ -44,9 +56,13 @@ export function linkHoverHandler(event, node) {
     if (event.type === 'mouseout') {
         return tooltip.style("visibility", "hidden")
     }
+    const product = productData[node.data.name]
+    const tooltipHtml = `Process: ${product.processName}` +
+        `<br>Work Order:${product.workOrder}`
     tooltip
         .style("visibility", "visible")
-        .style("top", (event.pageY - 40) + "px")
-        .style("left", (event.pageX - 100) + "px")
+        .style("top", (event.pageY - 70) + "px")
+        .style("left", (event.pageX - 130) + "px")
+        .html(tooltipHtml)
 }
 

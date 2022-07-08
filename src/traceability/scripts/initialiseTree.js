@@ -31,7 +31,7 @@ export const tooltip = d3.select("#tree")
     .attr("class", "tooltip")
     .style("position", "absolute")
     .style("visibility", "hidden")
-    .text("I'm a circle!");
+    .text("I'm a tooltip!");
 
 // Assigns parent, children, height, depth
 export const root = d3.hierarchy(treeData, function (d) {

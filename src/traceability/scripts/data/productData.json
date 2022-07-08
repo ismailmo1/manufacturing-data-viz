@@ -1,17 +1,36 @@
 {
     "Guar PreMix": {
-        "lotNumber": "guar_123"
+        "lotNumber": "GUA-001",
+        "processName":"Mixing",
+        "workOrder":"MIX-001",
+        "date":"06/07/2022",
+        "quantity": 11.25
     },
     "Shampoo A": {
-        "lotNumber": "shampooA_123"
+        "lotNumber": "SHA-001",
+        "quantity": 11.26,
+        "date":"06/07/2022"
+
     },
     "Guar Powder": {
-        "lotNumber": "powder_123"
+        "lotNumber": "GPW-001",
+        "processName":"Premixing",
+        "workOrder":"PRE-001",
+        "date":"05/07/2022",
+        "quantity": 1.25
     },
     "Water": {
-        "lotNumber": "water_123"
+        "lotNumber": "WTR-001",
+        "processName":"Premixing",
+        "workOrder":"PRE-001",
+        "date":"05/07/2022",
+        "quantity": 10
     },
     "Fragrance A": {
-        "lotNumber": "fragA_123"
+        "lotNumber": "FRG-001",
+        "processName":"Mixing",
+        "workOrder":"MIX-001",
+        "date":"06/07/2022",
+        "quantity": 0.1
     }
 }
