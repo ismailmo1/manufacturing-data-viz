@@ -1,3 +1,4 @@
+import productData from './data/productData.json'
 import { update } from "./updateTree"
 
 // Collapse the node and all it's children
@@ -18,6 +19,13 @@ export function diagonal(s, d) {
 
 }
 
+function addProductDetails(d) {
+    const product = productData[d.data.name]
+
+    document.getElementById('productName').innerText = d.data.name;
+    document.getElementById('lotNumber').innerText = product.lotNumber;
+}
+
 // Toggle children on click.
 export function click(e, d) {
     if (d.children) {
@@ -28,4 +36,5 @@ export function click(e, d) {
         d._children = null;
     }
     update(d);
+    addProductDetails(d)
 }
