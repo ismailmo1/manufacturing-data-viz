@@ -4,11 +4,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     mode: 'development',
     devtool: 'inline-source-map',
+    devServer: {
+        static: './dist',
+        port: 8000
+    },
     entry: {
         home: './src/script.js',
         saltCurve: './src/salt-curve/script.js',
         scheduling: './src/scheduling/script.js',
-        traceability: './src/traceability/script.js',
+        traceability: './src/traceability/scripts/main.js',
     },
     output: {
         filename: 'js/[name].bundle.js',
@@ -19,6 +23,8 @@ module.exports = {
         splitChunks: {
             chunks: 'all',
         },
+        runtimeChunk: 'single',
+
     },
     module: {
         rules: [
