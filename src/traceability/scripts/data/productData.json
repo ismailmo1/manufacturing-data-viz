@@ -1,0 +1,17 @@
+{
+    "Guar PreMix": {
+        "lotNumber": "guar_123"
+    },
+    "Shampoo A": {
+        "lotNumber": "shampooA_123"
+    },
+    "Guar Powder": {
+        "lotNumber": "powder_123"
+    },
+    "Water": {
+        "lotNumber": "water_123"
+    },
+    "Fragrance A": {
+        "lotNumber": "fragA_123"
+    }
+}

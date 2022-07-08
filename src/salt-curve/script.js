@@ -1,3 +1,9 @@
+import Chart from 'chart.js/auto';
+import annotationPlugin from 'chartjs-plugin-annotation';
+import './style.css';
+
+Chart.register(annotationPlugin);
+
 const saltCurveCtx = document.getElementById("saltCurveChart")
 const desiredViscosityInput = document.getElementById("desiredViscosityInput");
 const currentViscosityInput = document.getElementById("currentViscosityInput");
@@ -67,7 +73,7 @@ function linearInterpolate(yVal, point1, point2) {
     // rearrange slope eqn. 
     // i.e. (yVal - y1) / (xVal - x1) == slope
 
-    xVal = ((yVal - y1) / slope) + x1
+    const xVal = ((yVal - y1) / slope) + x1
     return xVal
 }
 
@@ -91,13 +97,13 @@ function getSurroundingPoints(yVal, yDataset, xDataset) {
     // get [higherPoint, lowerPoint] surrounding yVal
 
     // get surrounding yvalues
-    [y2, y1] = findSurroundingValues(yVal, yDataset)
+    const [y2, y1] = findSurroundingValues(yVal, yDataset)
     // get idx of yVals
     const y2Idx = yDataset.indexOf(y2)
     const y1Idx = yDataset.indexOf(y1)
     // find corresponding xVals
-    x1 = xDataset[y1Idx]
-    x2 = xDataset[y2Idx]
+    const x1 = xDataset[y1Idx]
+    const x2 = xDataset[y2Idx]
     const point1 = [x1, y1]
     const point2 = [x2, y2]
     return [point2, point1]

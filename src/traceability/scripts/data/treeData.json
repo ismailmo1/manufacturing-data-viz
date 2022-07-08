@@ -1,0 +1,26 @@
+{
+    "name": "Shampoo A",
+    "parent": "null",
+    "children": [
+        {
+            "name": "Guar PreMix",
+
+            "parent": "Shampoo A",
+            "children": [
+                {
+                    "name": "Guar Powder",
+
+                    "parent": "Guar PreMix"
+                },
+                {
+                    "name": "Water",
+                    "parent": "Guar PreMix"
+                }
+            ]
+        },
+        {
+            "name": "Fragrance A",
+            "parent": "Top Level"
+        }
+    ]
+}
