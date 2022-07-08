@@ -20,6 +20,10 @@ h1, #tree{
     cursor: pointer;
 }
 
+.node circle:hover{
+    stroke-width: 5px;
+}
+
 .node circle {
     fill: #fff;
     stroke: steelblue;
@@ -34,4 +38,19 @@ h1, #tree{
     fill: none;
     stroke: #ccc;
     stroke-width: 2px;
+    cursor: pointer;
+}
+
+
+.link:hover{
+    stroke-width: 5px;
+    stroke: rgb(0, 0, 0);
+}
+
+.tooltip{
+    background-color: white;
+    border: solid;
+    border-width: 2px;
+    border-radius: 5px;
+    padding: 5px;
 }

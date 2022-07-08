@@ -1,5 +1,5 @@
 import { root, svg, treemap } from './initialiseTree';
-import { click, diagonal } from './utils';
+import { click, diagonal, linkHoverHandler } from './utils';
 
 let nodeId = 0
 const duration = 750
@@ -16,6 +16,8 @@ export function update(source) {
 
     // Normalize for fixed-depth.
     nodes.forEach(function (d) {
+        // move nodes to horizontal locations based on tree depth
+        // i.e. i.e. at tree level (TL) 0 : y=0, TL 1:y=180, TL2: y=360 ... 
         d.y = d.depth * 180
     });
 
@@ -108,6 +110,10 @@ export function update(source) {
             }
             return diagonal(o, o)
         });
+
+    linkEnter.on('mouseover', (e, l) => linkHoverHandler(e, l))
+    linkEnter.on('mouseout', (e, l) => linkHoverHandler(e, l))
+    linkEnter.on('mousemove', (e, l) => linkHoverHandler(e, l))
 
     // UPDATE
     const linkUpdate = linkEnter.merge(link);

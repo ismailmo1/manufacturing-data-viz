@@ -1,4 +1,5 @@
 import productData from './data/productData.json'
+import { tooltip } from './initialiseTree'
 import { update } from "./updateTree"
 
 // Collapse the node and all it's children
@@ -38,3 +39,14 @@ export function click(e, d) {
     update(d);
     addProductDetails(d)
 }
+
+export function linkHoverHandler(event, node) {
+    if (event.type === 'mouseout') {
+        return tooltip.style("visibility", "hidden")
+    }
+    tooltip
+        .style("visibility", "visible")
+        .style("top", (event.pageY - 40) + "px")
+        .style("left", (event.pageX - 100) + "px")
+}
+

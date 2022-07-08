@@ -25,7 +25,13 @@ export const svg = d3.select("#tree").append("svg")
     .attr("transform", "translate(" +
         margin.left + "," + margin.top + ")");
 
-
+// create a tooltip
+export const tooltip = d3.select("#tree")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("position", "absolute")
+    .style("visibility", "hidden")
+    .text("I'm a circle!");
 
 // Assigns parent, children, height, depth
 export const root = d3.hierarchy(treeData, function (d) {
