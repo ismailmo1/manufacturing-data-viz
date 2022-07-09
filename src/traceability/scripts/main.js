@@ -1,12 +1,11 @@
-import '../style.css';
-import { root, svg, treemap } from './initialiseTree';
-import { update } from './updateTree';
-import { collapse } from './utils';
+import "../style.css";
+import { root, svg, treemap } from "./initialiseTree";
+import { update } from "./updateTree";
+import { collapse } from "./utils";
 
-const productDetailView = {}
-productDetailView.name = document.getElementById("productName")
-productDetailView.lotNumber = document.getElementById("lotNumber")
-
+const productDetailView = {};
+productDetailView.name = document.getElementById("productName");
+productDetailView.lotNumber = document.getElementById("lotNumber");
 
 // Collapse after the second level
 root.children.forEach(collapse);
