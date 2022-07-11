@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Quality Addition</title>
+<script defer src="../js/runtime.bundle.js"></script><script defer src="../js/vendors-node_modules_chart_js_auto_auto_esm_js-node_modules_chartjs-plugin-annotation_dist_ch-e852d4.bundle.js"></script><script defer src="../js/saltCurve.bundle.js"></script></head>
+
+<body>
+    <h1>Quality Adjustment Workflow</h1>
+    <canvas id="saltCurveChart" width="500" height="300"></canvas>
+
+    <div class="grid-container">
+        <div class="grid-item">
+            <label for="desired">Desired Viscosity: </label>
+            <input type="number" name="desired" id="desiredViscosityInput" step=0.2>
+        </div>
+        <div class="grid-item">
+            <label for="current">Current Viscosity: </label>
+            <input type="number" name="current" id="currentViscosityInput" step=0.2>
+        </div>
+    </div>
+</body>
+
+</html>
