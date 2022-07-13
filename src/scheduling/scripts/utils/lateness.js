@@ -20,9 +20,9 @@ export function calculateLateness(vfChartData) {
 export function sumLateness(vfData) {
   // calculate lateness from vf data
 
-  // dont negate lateness for early orders
   return vfData.reduce((prev, curr) => {
     if (!curr["tardiness_flag"]) {
+      // dont negate lateness for early orders
       return prev + curr["tardiness_duration"];
     }
     return prev;
