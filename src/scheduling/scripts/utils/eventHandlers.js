@@ -1,11 +1,7 @@
+import { vfChartAfterData, vfChartBeforeData } from "../charts/chartData";
+import { afterChart, beforeChart } from "../charts/scheduleCharts";
+import vfData from "../data/optsched.json";
 import { bgColourMap } from "./colours";
-import vfData from "./data/optsched.json";
-import {
-  afterChart,
-  beforeChart,
-  vfChartAfterData,
-  vfChartBeforeData,
-} from "./scheduleCharts";
 
 import { filterAnnotations } from "./annotations";
 

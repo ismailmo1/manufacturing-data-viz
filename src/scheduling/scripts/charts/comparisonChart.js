@@ -1,13 +1,10 @@
 import Chart from "chart.js/auto";
 import annotationPlugin from "chartjs-plugin-annotation";
-import "../style.css";
-import { sumLateness, unoptimisedOrderLateness } from "./analysis";
-import vfData from "./data/optsched.json";
+import { optimisedLatenessData, unoptimisedLatenessData } from "./chartData";
 
 Chart.register(annotationPlugin);
 
 const comparisonCtx = document.getElementById("comparisonChart");
-const latenessData = [sumLateness(vfData) / vfData.length, sumLateness(vfData)];
 
 export const comparisonChart = new Chart(comparisonCtx, {
   type: "bar",
@@ -17,17 +14,14 @@ export const comparisonChart = new Chart(comparisonCtx, {
     datasets: [
       {
         label: "Unoptimised",
-        data: [
-          unoptimisedOrderLateness / vfData.length,
-          unoptimisedOrderLateness,
-        ],
+        data: unoptimisedLatenessData,
         backgroundColor: "rgba(255, 99, 132, 0.2)",
         borderColor: "rgb(0,0,0)",
         borderWidth: 0.4,
       },
       {
         label: "Optimised",
-        data: latenessData,
+        data: optimisedLatenessData,
         backgroundColor: "rgba(75, 192, 192, 0.2)",
         borderColor: "rgb(0,0,0)",
         borderWidth: 0.4,

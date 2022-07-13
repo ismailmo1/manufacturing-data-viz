@@ -1,4 +1,4 @@
-import vfData from "./data/optsched.json";
+import vfData from "../data/optsched.json";
 
 const colours = [
   "rgba(255, 99, 132, 0.2)",

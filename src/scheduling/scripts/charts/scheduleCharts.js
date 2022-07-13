@@ -1,43 +1,16 @@
 import Chart from "chart.js/auto";
 import annotationPlugin from "chartjs-plugin-annotation";
-import { bgColourMap } from "./colours";
-import vfData from "./data/optsched.json";
-import { barClickHandler, legendClickHandler } from "./eventHandlers";
+import vfData from "../data/optsched.json";
+import { bgColourMap } from "../utils/colours";
+import { barClickHandler, legendClickHandler } from "../utils/eventHandlers";
+import { vfChartAfterData, vfChartBeforeData } from "./chartData";
 
-import { getDeadlineAnnotations } from "./annotations";
+import { getDeadlineAnnotations } from "../utils/annotations";
 
 Chart.register(annotationPlugin);
 
 const beforeCtx = document.getElementById("beforeChart");
 const afterCtx = document.getElementById("afterChart");
-
-export const vfChartBeforeData = vfData
-  .sort((a, b) => {
-    return a["original_sequence"] - b["original_sequence"];
-  })
-  .map((data) => {
-    return {
-      data: [data["process_time"]],
-      label: data["order_number"],
-      backgroundColor: bgColourMap[data["order_number"]],
-      borderColor: "rgb(0,0,0)",
-      borderWidth: 0.4,
-    };
-  });
-
-export const vfChartAfterData = vfData
-  .sort((a, b) => {
-    return a["sequence"] - b["sequence"];
-  })
-  .map((data) => {
-    return {
-      data: [data["process_time"]],
-      label: data["order_number"],
-      backgroundColor: bgColourMap[data["order_number"]],
-      borderColor: "rgb(0,0,0)",
-      borderWidth: 0.4,
-    };
-  });
 
 export const beforeChart = new Chart(beforeCtx, {
   type: "bar",

@@ -1,6 +1,6 @@
 import "../style.css";
-import { comparisonChart } from "./comparisonChart";
-import { afterChart, beforeChart } from "./scheduleCharts";
+import { comparisonChart } from "./charts/comparisonChart";
+import { afterChart, beforeChart } from "./charts/scheduleCharts";
 
 // chart.update is not really necessary
 // only included here so we can import in charts
