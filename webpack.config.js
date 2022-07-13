@@ -10,7 +10,7 @@ module.exports = {
   },
   entry: {
     home: "./src/script.js",
-    saltCurve: "./src/salt-curve/script.js",
+    saltCurve: "./src/salt-curve/scripts/main.js",
     scheduling: "./src/scheduling/scripts/main.js",
     traceability: "./src/traceability/scripts/main.js",
   },
