@@ -11,8 +11,9 @@
 <body>
     redirecting...
     <script>
+        const currPath = window.location.pathname;
         // redirecting to dist folder
-        window.location.replace("/dist")
+        window.location.replace(currPath + "/dist")
     </script>
 </body>
 
