@@ -1,4 +1,4 @@
-import saltCurveData from "../data/saltCurve.json";
+import saltCurveData from "./data/saltCurve.json";
 import { calculateConcentration } from "./interpolation";
 import { maxXAxis } from "./saltCurveChart";
 

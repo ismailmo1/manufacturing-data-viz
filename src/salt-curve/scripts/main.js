@@ -1,6 +1,6 @@
-import saltCurveData from "../data/saltCurve.json";
 import "../style.css";
 import { updateAnnotations } from "./annotations";
+import saltCurveData from "./data/saltCurve.json";
 import { saltCurveChart } from "./saltCurveChart";
 
 saltCurveChart.update();

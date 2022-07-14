@@ -1,6 +1,6 @@
 import Chart from "chart.js/auto";
 import annotationPlugin from "chartjs-plugin-annotation";
-import saltCurveData from "../data/saltCurve.json";
+import saltCurveData from "./data/saltCurve.json";
 
 Chart.register(annotationPlugin);
 const saltCurveCtx = document.getElementById("saltCurveChart");
