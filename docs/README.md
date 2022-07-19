@@ -1,6 +1,6 @@
 # Documentation
 
-This file contains general documentation related to this project. For details on the specific visualisation, check out their respective folders in the [src folder](../src/).
+This file contains general documentation related to this project. For details on a specific visualisation, check out their respective folders in the [src folder](../src/).
 
 ## How to use this project
 
@@ -46,4 +46,49 @@ This file contains general documentation related to this project. For details on
 
     `npm run build`
 
-4.  The build files will be located in the `./dist/` folder so you can access it the same way as above (see "How to use this project")
+4.  The build files will be located in the `./dist/` folder so you can access the static pages in the same way as above (see "How to use this project") - for development use the [dev server](https://webpack.js.org/configuration/dev-server) by running
+
+    `npm run start`
+
+    Then you can access the site http://localhost:8000/ during development without needing to build each time you make a change
+
+### Data integration
+
+The visualisations in this project currently use json files as the data source for demo purposes as the "real" production data sources are unavailable.
+
+Therefore, there are two approaches (that I can think of atleast!) to integrate with new/different data:
+
+1. Ensure the new data source is saved in the same location and has the same format as the current data source so no changes will need to be made to any of the source code.
+2. Change the source code so the data is fetched from a server/data external source rather than imported
+   e.g. instead of:
+
+   ```
+   import data from 'data/data.json';
+
+   chart.data = data;
+   ```
+
+   you can do:
+
+   ```
+
+   const getData = async ()=>{
+       // replace this with whatever logic is needed to get your data
+       const res = await fetch("datasource.com/api/endpoint");
+       const data = await res.json();
+       return data;
+   }
+
+   const data = await getData();
+   chart.data = data
+   ```
+
+   Setting the chart data will vary depending on the visualisation, the above examples are an oversimplification since the focus is on data fetching. Check out the individual visualisations in the [src folder](../src/) for specific implementations.
+
+## Resources
+
+### Webpack
+
+If you are interested in javascript/frontend web development I recommend learning a bit about webpack - I found the [starter guide](https://webpack.js.org/guides/getting-started) to be enough to get me going and then I went through the [documentation](https://webpack.js.org/configuration/) for specific setting I needed, and then used google/stackoverflow to make the rest of my way here.
+
+If you prefer videos then this is a good overview from [Traversy Media on Youtube](https://www.youtube.com/watch?v=IZGNcSuwBZs&t=1s).
