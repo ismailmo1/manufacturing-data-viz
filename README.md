@@ -10,7 +10,7 @@ This visualisation aims to show the differences in the optimised and unoptimised
 
 The first group of charts are interactive: clicking on the individual bars (work orders) will filter the chart and display metrics e.g. how early/late the work order is.
 
-![Schedule Optimisation Demo](./gifs/scheopt.gif)
+![Schedule Optimisation Demo](./docs/assets/scheopt.gif)
 
 ### 2. Traceability Tree
 
@@ -20,7 +20,7 @@ This visualisation aims to visualise the genealogy of products within the MES an
 
 The nodes and links in the tree display contextual data when clicked on and hovered.
 
-![Traceability Tree Demo](./gifs/traceability.gif)
+![Traceability Tree Demo](./docs/assets/traceability.gif)
 
 ### 3. Salt Curve
 
@@ -30,7 +30,7 @@ This visualisation aims to demonstrate how the the concentration values are calc
 
 The current and desired viscosities are added as annotations and the concentration is interpolated, the current inteprolate is simplified to be linear since this is just a visualisation, however the interpolate method can be changed in the implementation (see code and implementation links above).
 
-![Salt Curve Demo](./gifs/saltcurve.gif)
+![Salt Curve Demo](./docs/assets/saltcurve.gif)
 
 ---
 

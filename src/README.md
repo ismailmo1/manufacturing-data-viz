@@ -10,4 +10,4 @@ There is more information on the implementation of the visualisations in the fol
 
 The `./index.html`, `./style.css` and `./script.js` files you see in this folder are for the front page of the site, so if you add a visualisation this needs to be changed manually in `./index.html`.
 
-![Frontpage](../gifs/frontpage.png)
+![Frontpage](../docs/assets/frontpage.png)
