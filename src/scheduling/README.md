@@ -31,6 +31,8 @@ Chart.register(annotationPlugin);
 
 #### Deadline Annotations
 
+![deadline annotations](../../docs/assets/deadlines.png)
+
 Vertical lines were added to the chart to show the deadlines for each order by passing a function to the annotation plugin so the deadlines can be dynamically calculated from the optimised data:
 
 ```
@@ -49,7 +51,7 @@ Vertical lines were added to the chart to show the deadlines for each order by p
 `getDeadlineAnnotations` returns an object containing annotation objects (with the order number as the key) for each order in `vfData` - the optimisation results from virtual factory:
 
 ```
-//./scripts/utils/annotations.js
+// ./scripts/utils/annotations.js
 
 export function getDeadlineAnnotations(vfData, bgColourMap) {
     const deadLines = {};
@@ -62,5 +64,78 @@ export function getDeadlineAnnotations(vfData, bgColourMap) {
         };
     });
   return deadLines;
+}
+```
+
+#### Lateness Annotations
+
+![lateness annotations](../../docs/assets/lateness.png)
+
+The lateness annotations are added via the `onClick` handler for the schedule charts.
+
+```
+// ./scripts/charts/scheduleCharts.js
+export const afterChart = new Chart(afterCtx, {
+    ...
+    options: {
+        onClick: barClickHandler,
+        ...
+    }
+}
+
+```
+
+The bar click handler only shows the lateness for the clicked order for both charts (`data.label` is the order number):
+
+```
+// ./scripts/utils/eventHandlers.js
+
+export function barClickHandler(event, elements) {
+    ...
+    filterAnnotations(beforeChart, data.label, vfData, bgColourMap);
+    filterAnnotations(afterChart, data.label, vfData, bgColourMap);
+}
+```
+
+And the principles are the same as above: a line annotation object is generated and then added to the chart annotation plugin object:
+
+```
+// ./scripts/utils/annotations.js
+
+export function filterAnnotations(chart, orderNumber, vfData, bgColourMap) {
+    ...
+
+    const annotations = getDeadlineAnnotations(vfData, bgColourMap);
+    if (!isFiltered) {
+        ...
+        const latenessAnnotation = getLatenessAnnotation(chart, selectedOrderData);
+        annotations["lateness"] = latenessAnnotation;
+    }
+    chart.options.plugins.annotation.annotations = annotations;
+
+    chart.update();
+}
+```
+
+Generating the annotation requires the start and end x values of the annotation line, which corresponds to the time that marks the end of the order, and the time of the deadline respectively:
+
+```
+// ./scripts/utils/annotations.js
+
+export function getLatenessAnnotation(chart, orderData) {
+    ...
+    return {
+        type: "line",
+        label: {
+            ...
+            content: (ctx) =>
+            isLate
+                ? ["late by:", Math.round(latenessDuration)]
+                : ["early by:", -Math.round(latenessDuration)],
+        },
+        xMax: orderData["dead_line"],
+        xMin: endTime,
+        ...
+    };
 }
 ```
