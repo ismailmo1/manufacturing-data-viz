@@ -1,5 +1,7 @@
 # Schedule Optimisation
 
+![schedule charts](../../docs/assets/scheopt.gif)
+
 The goal of this visualisation is to show the changes in schedule after optimisation by the virtual factory models and highlight the improvements it makes. In this case, the optimisation reduces the lateness of orders by shuffling around the orders, so earlier due dates are prioritised, however this optimisation can be extended in the future to optimise for other parameters, e.g. changeover time.
 
 If you haven't used [chartjs](https://www.chartjs.org/) before, spend some time going through the [getting started](https://www.chartjs.org/docs/latest/) guide to make it easier to understand the rest of this documentation.
