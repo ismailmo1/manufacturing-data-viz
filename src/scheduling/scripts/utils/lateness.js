@@ -9,6 +9,8 @@ export function calculateLateness(vfChartData) {
     const orderDeadline = vfData.find(
       (vfOrder) => vfOrder.order_number === order.label
     )["dead_line"];
+
+    // increment time so current order's end time can be tracked
     currTime += Number(order.data);
     const orderLateness = currTime - orderDeadline;
     if (orderLateness > 0) unoptimisedOrderLateness += orderLateness;

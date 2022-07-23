@@ -141,3 +141,80 @@ export function getLatenessAnnotation(chart, orderData) {
     };
 }
 ```
+
+## Schedule Comparison
+
+![schedule comparison chart](../../docs/assets/sched-comparison.png)
+
+The aim of this chart is to aggregate the optimisation statistics to provide a clear view of the improvements from optimisation of the order schedule.
+
+This is a standard bar chart from chartjs using two labels: average and sum, and the two datasets for before and after optimisation:
+
+```
+// ./scripts/charts/comparisonChart.js
+
+export const comparisonChart = new Chart(comparisonCtx, {
+ ...
+  labels: ["average", "sum"],
+  data: {
+    labels: ["Average Lateness", "Total Lateness"],
+    datasets: [
+      {
+        data: unoptimisedLatenessData,
+        ...
+      },
+      {
+        data: optimisedLatenessData,
+        ...
+      },
+    ],
+  },
+  ...
+});
+```
+
+The datasets are derived from `./scripts/data/optsched.json` by calculating the average and total lateness for both optimised and unoptimsed order schedules:
+
+```
+// ./scripts/charts/chartData.js
+
+export const optimisedLatenessData = [
+  sumLateness(vfData) / vfData.length,
+  sumLateness(vfData),
+];
+
+const unoptimisedLateness = calculateLateness(vfChartBeforeData);
+
+export const unoptimisedLatenessData = [
+  unoptimisedLateness / vfData.length,
+  unoptimisedLateness,
+];
+```
+
+The lateness of the optimised orders is provided under the `tardiness_duration` key, however in the current version of the API, the lateness of the unoptimised orders is not returned so this needs to be calculated:
+
+```
+// ./scripts/utils/lateness.js
+
+export function calculateLateness(vfChartData) {
+  // calculate lateness from chart data
+  let unoptimisedOrderLateness = 0;
+  let currTime = 0;
+
+  vfChartData.forEach((order) => {
+    const orderDeadline = vfData.find(
+      (vfOrder) => vfOrder.order_number === order.label
+    )["dead_line"];
+
+    // increment time so current order's end time can be tracked
+    currTime += Number(order.data);
+    const orderLateness = currTime - orderDeadline;
+    if (orderLateness > 0) unoptimisedOrderLateness += orderLateness;
+    // dont negate lateness for early orders
+  });
+  return unoptimisedOrderLateness;
+}
+
+```
+
+In the future the API will return lateness values for unoptimised values also so this can logic be omitted and refer to the lateness directly as with the optimised schedule.
