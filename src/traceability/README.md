@@ -18,7 +18,7 @@ Data is imported from json files: the `./data/productData.json` holds detailed d
 
 ## Tree structure
 
-The tree data from the json file is used to create a `d3.hierarchy` data structure [(read more here)](https://observablehq.com/@d3/d3-hierarchy) which is passed to the `d3.tree` to initalise a [tree layout](https://observablehq.com/@d3/tree)
+The tree data is used to create a `d3.hierarchy` data structure [(read more here)](https://observablehq.com/@d3/d3-hierarchy) which is passed to the `d3.tree` to initalise a [tree layout](https://observablehq.com/@d3/tree)
 
 ```
 // ./scripts/initialiseTree.js
@@ -31,8 +31,10 @@ export const root = d3.hierarchy(treeData, function (d) {
 });
 ```
 
+Then we create the tree layout:s
+
 ```
-// ./scripts/updateeTree.js
+// ./scripts/updateTree.js
 
   const treeData = treemap(root);
 
@@ -41,3 +43,36 @@ export const root = d3.hierarchy(treeData, function (d) {
     links = treeData.descendants().slice(1);
 
 ```
+
+## Product Data
+
+The product data is used to add more context to the tree diagrams so the user can view more detailed information.
+
+In the click event handler for the nodes, we show product details below the tree diagrams:
+
+```
+// ./scripts/utils.js
+
+function addProductDetails(d) {
+    const product = productData[d.data.name];
+    const productIngredients = d.children || d._children;
+
+    document.getElementById("productName").innerText = d.data.name;
+    ...
+}
+```
+
+and the hover event handler for the links which adds a tooltip with details:
+
+```
+// ./scripts/utils.js
+
+export function linkHoverHandler(event, node) {
+    const product = productData[node.data.name];
+    const tooltipHtml =
+        `Process: ${product.processName}` + `<br>Work Order:${product.workOrder}`;
+    ...
+}
+```
+
+Checkout this repos [documentation page](../../docs/README.md#data-integration) for implementation ideas on how to integrate with external data sources, for this visualisation the raw data (i.e. a response from the MES web API or results from a SQL query) for creating the hierarchical relationshipwill need to be processed so that it matches the format of `./data/treeData.json`.s
