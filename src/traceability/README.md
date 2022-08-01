@@ -75,4 +75,4 @@ export function linkHoverHandler(event, node) {
 }
 ```
 
-Checkout this repos [documentation page](../../docs/README.md#data-integration) for implementation ideas on how to integrate with external data sources, for this visualisation the raw data (i.e. a response from the MES web API or results from a SQL query) for creating the hierarchical relationshipwill need to be processed so that it matches the format of `./data/treeData.json`.s
+Checkout this repos [documentation page](../../docs/README.md#data-integration) for implementation ideas on how to integrate with external data sources, for this visualisation the raw data (i.e. a response from the MES web API or results from a SQL query) for creating the hierarchical relationship will need to be processed so that it matches the format of `./data/treeData.json`.s
